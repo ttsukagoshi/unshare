@@ -14,8 +14,66 @@
    limitations under the License.
 */
 
-function myFunction() {}
+//////////////////////////
+// Add-on Card Builders //
+//////////////////////////
+
+/**
+ * Function to create the homepage card for the add-on.
+ * @param {Object} event Google Workspace Add-on Event object.
+ * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
+ */
+function buildHomepage(event) {
+  // Build card
+  let builder = CardService.newCardBuilder();
+  // Message Section
+  builder.addSection(
+    CardService.newCardSection()
+      .addWidget(
+        CardService.newTextParagraph().setText(
+          `Press the "Unshare" button to stop sharing the files to your collaborators.\nPlease note that this process, which will delete all editors, commentors, and viewers from this file except for you, the owner, <b>IS IRREVERSIBLE</b>.\n\n${JSON.stringify(
+            event
+          )}`
+        )
+      )
+      .addWidget(
+        CardService.newButtonSet().addButton(
+          CardService.newTextButton()
+            .setText('Unshare')
+            .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+            .setOnClickAction(
+              CardService.newAction().setFunctionName('unshare')
+            )
+        )
+      )
+  );
+  // Fixed Footer
+  builder.setFixedFooter(
+    CardService.newFixedFooter().setPrimaryButton(
+      CardService.newTextButton()
+        .setText('HELP')
+        .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+        .setOpenLink(
+          CardService.newOpenLink().setUrl(
+            'https://www.scriptable-assets.page/add-ons/unshare/'
+          )
+        )
+        .setDisabled(false)
+    )
+    /*
+      .setSecondaryButton(
+        CardService.newTextButton()
+          .setText('button 2')
+          .setOnClickAction(
+            CardService.newAction().setFunctionName('functionName')
+          )
+          .setDisabled(false)
+      )
+      */
+  );
+  return builder.build();
+}
 
 if (typeof module === 'object') {
-  module.exports = { myFunction };
+  module.exports = { buildHomepage };
 }
