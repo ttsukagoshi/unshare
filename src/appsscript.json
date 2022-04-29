@@ -2,5 +2,23 @@
   "timeZone": "Asia/Tokyo",
   "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "V8"
+  "runtimeVersion": "V8",
+  "oauthScopes": ["https://www.googleapis.com/auth/spreadsheets.currentonly"],
+  "addOns": {
+    "common": {
+      "name": "Unshare",
+      "logoUrl": "https://lh3.googleusercontent.com/pw/AM-JKLUeE_Ws9D1PaPh9_8CVmjpbscs1hQc8viJ_eBoZQ6OdolI3GyNrfAoWAy3w7hhvM2NSWY1EdFLsvCu2j5U7gtExx7Ou5uEctsImUiIvzDlKFRJl0LwRVqBMD7j2FHAiIsfS0-Vy7aFn5kaDh4MSvXZ4=s96-no",
+      "layoutProperties": {
+        "primaryColor": "#e71f19",
+        "secondaryColor": "#000000"
+      },
+      "openLinkUrlPrefixes": ["https://www.scriptable-assets.page/"],
+      "useLocaleFromApp": true,
+      "homepageTrigger": {
+        "runFunction": "buildHomepage",
+        "enabled": true
+      }
+    },
+    "sheets": {}
+  }
 }
