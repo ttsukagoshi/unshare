@@ -1,5 +1,4 @@
 ---
-
 #############################
 #############################
 ## JavaScript Linter rules ##
@@ -13,6 +12,7 @@ env:
   browser: true
   es6: true
   jest: true
+  node: true
 
 ###############
 # Global Vars #
@@ -20,8 +20,10 @@ env:
 globals:
   # Atomics: readonly
   # SharedArrayBuffer: readonly
+  CacheService: readonly
   CalendarApp: readonly
   CardService: readonly
+  ContentService: readonly
   DocumentApp: readonly
   DriveApp: readonly
   FormApp: readonly
@@ -45,13 +47,14 @@ globals:
 parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 2018
-  sourceType: script
+  sourceType: module
 
 ###########
 # Plugins #
 ###########
 extends:
   - 'eslint:recommended'
+  - 'plugin:prettier/recommended'
 plugins:
   - '@typescript-eslint'
 

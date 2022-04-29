@@ -17,9 +17,9 @@ name: Lint Code Base
 on:
   push:
     branches-ignore: [main]
-    # Remove the line above to run when pushing to main
+    # Remove the line above to run when pushing to master
   pull_request:
-    branches: [main]
+    branches: [main, release]
 
 ###############
 # Set the Job #
@@ -39,7 +39,7 @@ jobs:
       # Checkout the code base #
       ##########################
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -48,9 +48,11 @@ jobs:
       # Run Linter against code base #
       ################################
       - name: Lint Code Base
-        uses: github/super-linter@v3
+        uses: docker://ghcr.io/github/super-linter:slim-v4 # uses: github/super-linter@v4 See https://github.com/github/super-linter#images
         env:
           VALIDATE_ALL_CODEBASE: true
+          LINTER_RULES_PATH: /
           VALIDATE_JAVASCRIPT_ES: true
+          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.yml
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
