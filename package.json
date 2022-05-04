@@ -11,7 +11,12 @@
     "url": "git+https://github.com/ttsukagoshi/unshare.git"
   },
   "keywords": [
-    "google-drive"
+    "google-apps-script",
+    "google-docs",
+    "google-drive",
+    "google-sheets",
+    "google-slides",
+    "google-workspace-add-on"
   ],
   "author": "ttsukagoshi",
   "license": "Apache-2.0",
