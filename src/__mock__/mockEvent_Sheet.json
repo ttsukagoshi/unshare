@@ -1,0 +1,14 @@
+{
+  "userTimezone": { "offSet": "32400000", "id": "Asia/Dili" },
+  "userCountry": "",
+  "hostApp": "sheets",
+  "commonEventObject": {
+    "platform": "WEB",
+    "hostApp": "SHEETS",
+    "userLocale": "en",
+    "timeZone": { "id": "Asia/Dili", "offset": 32400000 }
+  },
+  "clientPlatform": "web",
+  "userLocale": "en",
+  "sheets": {}
+}
