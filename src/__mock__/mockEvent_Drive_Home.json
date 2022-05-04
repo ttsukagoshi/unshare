@@ -1,0 +1,14 @@
+{
+  "clientPlatform": "web",
+  "commonEventObject": {
+    "hostApp": "DRIVE",
+    "timeZone": { "offset": 32400000, "id": "Asia/Dili" },
+    "platform": "WEB",
+    "userLocale": "en"
+  },
+  "drive": {},
+  "hostApp": "drive",
+  "userCountry": "",
+  "userLocale": "en",
+  "userTimezone": { "id": "Asia/Dili", "offSet": "32400000" }
+}
