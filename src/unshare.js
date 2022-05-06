@@ -21,6 +21,173 @@ const ADDON_EXEC_TIME_LIMIT_IN_MILLISEC = 30 * 1000; // Execution time limit of 
 const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
   ADDON_EXEC_TIME_LIMIT_IN_MILLISEC * 0.9;
 
+///////////////////////////
+// Language Localization //
+///////////////////////////
+
+const MESSAGES = {
+  // Message Naming Rules:
+  // Name of error messages (keys) must start with 'error'
+  // to distinguish between expected and unexpected errors
+  en: {
+    buttonCancel: 'CANCEL',
+    buttonContinue: 'CONTINUE',
+    buttonExecuteUnshare: 'UNSHARE',
+    buttonHelp: 'HELP',
+    buttonReturnHome: 'Return Home',
+    confirmationMessage:
+      'Are you sure you want to proceed with Unshare? You will be permanently removing all editors and viewers (including commenters) from these file/folder(s):{{targetFilesSummary}}\n<b>THIS ACTION CANNOT BE UNDONE</b>.\n\n{{ignoredFilesSummary}}',
+    errorExceededTimeLimit:
+      '[Exceeded Time Limit]\nThe execution time of Unshare is limited to {{addonExecTimeLimitInSec}} seconds by Google. It could not finish "un"sharing the following file/folder(s) due to this limit:\n{{unfinishedFilesList}}',
+    errorUnavailbleOnThisPlatform:
+      '[ERROR] Unshare is not available on this platform.',
+    errorYouMustBeOwner:
+      '[ERROR] You must be the owner of the file/folder(s) to execute Unshare:\n{{isNotOwnerFileNameList}}',
+    homepageDriveText:
+      'Select file(s) that you want to "un"share. Only the file/folder(s) that you own can be processed.',
+    homepageText:
+      'Press the "Continue" button to stop sharing the files with your collaborators.\n\nUnshare will delete all editors, commenters, and viewers from this file/folder except for you, the owner. If the target file/folder is shared with a class of users who have general access, for example, if it is shared with the user\'s domain, that access setting will be changed to Private, where only the users explicitly granted permission can access.\n\n<b>THIS PROCESS CANNOT BE UNDONE in Unshare</b>.',
+    noticeComplete: 'All file/folder(s) have been "un"shared.',
+    noticeIgnoredFilesPrefix:
+      'Note that the file/folder(s) below will be ignored since you are not the owner:',
+    userAccessEditor: 'editor',
+    userAccessViewer: 'viewer',
+    userAccessCommenter: 'commenter',
+  },
+  ja: {
+    buttonCancel: 'キャンセル',
+    buttonContinue: '次へ',
+    buttonExecuteUnshare: 'UNSHARE',
+    buttonHelp: 'ヘルプ',
+    buttonReturnHome: 'ホームに戻る',
+    confirmationMessage:
+      'Unshareは次のファイル/フォルダから全ての編集者と閲覧者を削除します。\n\n<b>この操作は元に戻せません。</b>\n\n{{targetFilesSummary}}\n\nこのままUnshareを実行してもいいですか？\n\n{{ignoredFilesSummary}}',
+    errorExceededTimeLimit:
+      '[Exceeded Time Limit]\nUnshareの処理時間が、Googleが定めた{{addonExecTimeLimitInSec}}秒を超過する見込みであったため、処理は中断されました。次のファイル/フォルダの処理がまだ完了していません:\n{{unfinishedFilesList}}',
+    errorUnavailbleOnThisPlatform:
+      '[ERROR] このサービスでUnshareは使用できません。',
+    errorYouMustBeOwner:
+      '[ERROR] Unshareを実行するためには、オーナーである必要があります:\n{{isNotOwnerFileNameList}}',
+    homepageDriveText:
+      '共有を停止したいファイル/フォルダを選択してください（複数可）。オーナー権を持つファイル/フォルダのみが処理対象となります。',
+    homepageText:
+      'Unshareはあなた（ファイル/フォルダのオーナー）を除く全ての編集者・閲覧者を共有先から削除します。また、組織内での共有など共有の範囲が定められている場合は、その範囲を「制限付き」（許可されたユーザのみがアクセス可能）に変更します。\n\n<b>この操作は、Unshareでは元に戻せません</b>.\n\n他の編集者・閲覧者との共有を解除するには「次へ」ボタンを押してください。',
+    noticeComplete: 'すべてのファイル/フォルダの共有が解除されました。',
+    noticeIgnoredFilesPrefix:
+      'なお、オーナーでない次のファイル/フォルダは処理されません:',
+    userAccessEditor: '編集',
+    userAccessViewer: '閲覧',
+    userAccessCommenter: 'コメント',
+  },
+};
+
+class LocalizedMessage {
+  /**
+   * @param {String} userLocale
+   */
+  constructor(userLocale) {
+    this.DEFAULT_LOCALE = 'en';
+    if (userLocale.match(/^[a-z]{2}(-[A-Z]{2})?$/g)) {
+      // Event objects in Google Workspace Add-ons contain user locale info
+      // in the format two-letter ISO 639 language code (e.g., "en" and "ja")
+      // or with an additiona hyphen followed by ISO 3166 country/region code (e.g., "en-GB")
+      // https://developers.google.com/apps-script/add-ons/concepts/event-objects#common_event_object
+      let availableLocales = Object.keys(MESSAGES);
+      let twoLetterUserLocale = userLocale.slice(0, 2);
+      if (availableLocales.includes(userLocale)) {
+        this.locale = userLocale;
+      } else if (availableLocales.includes(twoLetterUserLocale)) {
+        this.locale = twoLetterUserLocale;
+      } else {
+        this.locale = this.DEFAULT_LOCALE;
+      }
+    } else {
+      this.locale = this.DEFAULT_LOCALE;
+    }
+    this.messageList = MESSAGES[this.locale];
+    Object.keys(MESSAGES[this.DEFAULT_LOCALE]).forEach((key) => {
+      if (!this.messageList[key]) {
+        this.messageList[key] = MESSAGES[this.DEFAULT_LOCALE][key];
+      }
+    });
+  }
+
+  /**
+   * Replace placeholder values in the designated text. String.prototype.replace() is executed using regular expressions with the 'global' flag on.
+   * @param {String} text
+   * @param {Array} placeholderValues Array of objects containing a placeholder string expressed in regular expression and its corresponding value.
+   * @returns {String} The replaced text.
+   */
+  replacePlaceholders_(text, placeholderValues = []) {
+    let replacedText = placeholderValues.reduce(
+      (acc, cur) => acc.replace(new RegExp(cur.regexp, 'g'), cur.value),
+      text
+    );
+    return replacedText;
+  }
+
+  /**
+   * Replace placeholder string in this.messageList.confirmationMessage
+   * @param {String} targetFilesSummary
+   * @param {String} ignoredFilesSummary
+   * @returns {String} The replaced text.
+   */
+  replaceConfirmationMessage(targetFilesSummary, ignoredFilesSummary) {
+    let text = this.messageList.confirmationMessage;
+    let placeholderValues = [
+      {
+        regexp: '{{targetFilesSummary}}',
+        value: targetFilesSummary,
+      },
+      {
+        regexp: '{{ignoredFilesSummary}}',
+        value: ignoredFilesSummary,
+      },
+    ];
+    text = this.replacePlaceholders_(text, placeholderValues);
+    return text;
+  }
+
+  /**
+   * Replace placeholder string in this.messageList.errorYouMustBeOwner
+   * @param {String} isNotOwnerFileNameList
+   * @returns {String} The replaced text.
+   */
+  replaceErrorYouMustBeOwner(isNotOwnerFileNameList) {
+    let text = this.messageList.errorYouMustBeOwner;
+    let placeholderValues = [
+      {
+        regexp: '{{isNotOwnerFileNameList}}',
+        value: isNotOwnerFileNameList,
+      },
+    ];
+    text = this.replacePlaceholders_(text, placeholderValues);
+    return text;
+  }
+
+  /**
+   * Replace placeholder string in this.messageList.errorExceededTimeLimit
+   * @param {Number} addonExecTimeLimitInSec
+   * @param {String} unfinishedFilesList
+   * @returns {String} The replaced text.
+   */
+  replaceErrorExceededTimeLimit(addonExecTimeLimitInSec, unfinishedFilesList) {
+    let text = this.messageList.errorExceededTimeLimit;
+    let placeholderValues = [
+      {
+        regexp: '{{addonExecTimeLimitInSec}}',
+        value: addonExecTimeLimitInSec,
+      },
+      {
+        regexp: '{{unfinishedFilesList}}',
+        value: unfinishedFilesList,
+      },
+    ];
+    text = this.replacePlaceholders_(text, placeholderValues);
+    return text;
+  }
+}
+
 //////////////////////////
 // Add-on Card Builders //
 //////////////////////////
@@ -33,13 +200,17 @@ const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
  */
 function buildHomepage(event) {
   console.log(JSON.stringify(event)); // debug
+  // Localized Message
+  const localizedMessage = new LocalizedMessage(
+    event.commonEventObject.userLocale
+  );
   // Build card
   let builder = CardService.newCardBuilder();
   // Message Section
   builder.addSection(
     CardService.newCardSection().addWidget(
       CardService.newTextParagraph().setText(
-        'Press the "Continue" button to stop sharing the files with your collaborators.\n\nUnshare will delete all editors, commenters, and viewers from this file/folder except for you, the owner.\n\n<b>THIS PROCESS CANNOT BE UNDONE</b>.'
+        localizedMessage.messageList.homepageText
       )
     )
   );
@@ -48,14 +219,14 @@ function buildHomepage(event) {
     CardService.newFixedFooter()
       .setPrimaryButton(
         CardService.newTextButton()
-          .setText('CONTINUE')
+          .setText(localizedMessage.messageList.buttonContinue)
           .setOnClickAction(
             CardService.newAction().setFunctionName('buildConfirmationPage')
           )
       )
       .setSecondaryButton(
         CardService.newTextButton()
-          .setText('HELP')
+          .setText(localizedMessage.messageList.buttonHelp)
           .setOpenLink(
             CardService.newOpenLink().setUrl(
               'https://www.scriptable-assets.page/add-ons/unshare/'
@@ -75,13 +246,17 @@ function buildHomepage(event) {
  */
 function buildDriveHomepage(event) {
   console.log(JSON.stringify(event)); // debug
+  // Localized Message
+  const localizedMessage = new LocalizedMessage(
+    event.commonEventObject.userLocale
+  );
   // Build card
   let builder = CardService.newCardBuilder();
   // Message Section
   builder.addSection(
     CardService.newCardSection().addWidget(
       CardService.newTextParagraph().setText(
-        'Select file(s) that you want to "un"share. Only the files that you own can be processed.'
+        localizedMessage.messageList.homepageDriveText
       )
     )
   );
@@ -108,16 +283,26 @@ function buildDriveItemsSelected(event) {
  */
 function buildConfirmationPage(event) {
   console.log(JSON.stringify(event)); // debug
+  // Localized Message
+  const localizedMessage = new LocalizedMessage(
+    event.commonEventObject.userLocale
+  );
   let isHostDrive = event.commonEventObject.hostApp === 'DRIVE';
   try {
     let fileUsers = getFileUsers(event);
     if (fileUsers.isOwner.length > 0) {
       const targetFilesSummary = fileUsers.isOwner.reduce((text, file) => {
         let editorList = file.editors
-          .map((editor) => ` - ${editor} (editor)`)
+          .map(
+            (editor) =>
+              ` - ${editor} (${localizedMessage.messageList.userAccessEditor})`
+          )
           .join('\n');
         let viewerList = file.viewers
-          .map((viewer) => ` - ${viewer} (viewer/commenter)`)
+          .map(
+            (viewer) =>
+              ` - ${viewer} (${localizedMessage.messageList.userAccessViewer}/${localizedMessage.messageList.userAccessCommenter})`
+          )
           .join('\n');
         text += `\n<b>${file.fileName}</b>\n${editorList}\n${viewerList}\n`;
         return text;
@@ -128,12 +313,15 @@ function buildConfirmationPage(event) {
           : fileUsers.isNotOwner.reduce((text, file) => {
               text += `\n * ${file.fileName}`;
               return text;
-            }, 'Note that the files below will be ignored since you are not the owner:');
+            }, localizedMessage.messageList.noticeIgnoredFilesPrefix);
       let builder = CardService.newCardBuilder();
       builder.addSection(
         CardService.newCardSection().addWidget(
           CardService.newTextParagraph().setText(
-            `Are you sure you want to proceed with Unshare? You will be permanently removing all editors and viewers (including commenters) from these file/folder(s):${targetFilesSummary}\n<b>THIS ACTION CANNOT BE UNDONE</b>.\n\n${ignoredFilesSummary}`
+            localizedMessage.replaceConfirmationMessage(
+              targetFilesSummary,
+              ignoredFilesSummary
+            )
           )
         )
       );
@@ -143,7 +331,7 @@ function buildConfirmationPage(event) {
         CardService.newFixedFooter()
           .setPrimaryButton(
             CardService.newTextButton()
-              .setText('Cancel')
+              .setText(localizedMessage.messageList.buttonCancel)
               .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
               .setOnClickAction(
                 CardService.newAction().setFunctionName(functionName)
@@ -151,7 +339,7 @@ function buildConfirmationPage(event) {
           )
           .setSecondaryButton(
             CardService.newTextButton()
-              .setText('Unshare')
+              .setText(localizedMessage.messageList.buttonExecuteUnshare)
               .setOnClickAction(
                 CardService.newAction().setFunctionName('unshare')
               )
@@ -163,7 +351,7 @@ function buildConfirmationPage(event) {
         .map((isNotOwnerFile) => ` - ${isNotOwnerFile.fileName}`)
         .join('\n');
       throw new Error(
-        `[ERROR] You must be the owner of the file/folder(s) to execute Unshare:\n${isNotOwnerFileNameList}`
+        localizedMessage.replaceErrorYouMustBeOwner(isNotOwnerFileNameList)
       );
     }
   } catch (error) {
@@ -177,6 +365,10 @@ function buildConfirmationPage(event) {
 
 function unshare(event) {
   console.log(JSON.stringify(event)); // debug
+  // Localized Message
+  const localizedMessage = new LocalizedMessage(
+    event.commonEventObject.userLocale
+  );
   const start = new Date();
   try {
     let fileUsers = getFileUsers(event, true);
@@ -188,17 +380,17 @@ function unshare(event) {
       fileSummary.editors.forEach((editor) => {
         file.removeEditor(editor);
         // Check the execution time and quit if the runtime is expected to exceeed the time limit
-        checkExecTime(start, i, ownerArr, false);
+        checkExecTime(start, i, ownerArr, localizedMessage.locale, false);
       });
       // Remove Viewers and Commentors
       fileSummary.viewers.forEach((viewer) => {
         file.removeViewer(viewer);
-        checkExecTime(start, i, ownerArr, false);
+        checkExecTime(start, i, ownerArr, localizedMessage.locale, false);
       });
-      checkExecTime(start, i, ownerArr, true);
+      checkExecTime(start, i, ownerArr, localizedMessage.locale, true);
     });
     return createMessageCard(
-      'All file(s)/folder(s) have been "un"shared.',
+      localizedMessage.messageList.noticeComplete,
       event.commonEventObject.userLocale,
       event.commonEventObject.hostApp === 'DRIVE'
     );
@@ -220,8 +412,7 @@ function unshare(event) {
  * @returns {Object} Google Workspace Add-on Card object.
  */
 function createMessageCard(message, userLocale, isHostDrive = false) {
-  // var localizedMessage = new LocalizedMessage(userLocale);
-  console.log(`message: ${message}\nuserLocale: ${userLocale}`); // debug
+  const localizedMessage = new LocalizedMessage(userLocale);
   const functionName = isHostDrive ? 'buildDriveHomepage' : 'buildHomepage';
   let builder = CardService.newCardBuilder().addSection(
     CardService.newCardSection().addWidget(
@@ -232,7 +423,7 @@ function createMessageCard(message, userLocale, isHostDrive = false) {
   builder.setFixedFooter(
     CardService.newFixedFooter().setPrimaryButton(
       CardService.newTextButton()
-        .setText('Return Home')
+        .setText(localizedMessage.messageList.buttonReturnHome)
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
         .setOnClickAction(CardService.newAction().setFunctionName(functionName))
     )
@@ -250,6 +441,10 @@ function createMessageCard(message, userLocale, isHostDrive = false) {
  */
 function getFileUsers(event, useCache = false) {
   const cache = CacheService.getUserCache();
+  // Localized Message
+  const localizedMessage = new LocalizedMessage(
+    event.commonEventObject.userLocale
+  );
   // Get the array of target file/folder IDs from the event object
   let fileIds = [];
   switch (event.commonEventObject.hostApp) {
@@ -266,7 +461,9 @@ function getFileUsers(event, useCache = false) {
       fileIds.push(SlidesApp.getActivePresentation().getId());
       break;
     default:
-      throw new Error('[ERROR] Unshare is not available on this platform.');
+      throw new Error(
+        localizedMessage.messageList.errorUnavailbleOnThisPlatform
+      );
   }
   // Get the list of users who have access to the target files/folders
   let fileUsers = fileIds.reduce(
@@ -324,26 +521,30 @@ function getFileUsers(event, useCache = false) {
  * @param {Date} startTime Date object indicating the start time of the add-on execution
  * @param {Number} currentIndex Current index
  * @param {Array} originalFileArray The original array of target files
+ * @param {String} userLocale User locale defined in the Google Workspace Add-on event object
  * @param {Boolean} isFileEnd Indicator to show if this check function is executed at the end of a single file process. Defaults to false.
  */
 function checkExecTime(
   startTime,
   currentIndex,
   originalFileArray,
+  userLocale,
   isFileEnd = false
 ) {
   if (
     new Date().getTime() - startTime.getTime() >=
     ADDON_EXEC_TIME_LIMIT_WITH_BUFFER
   ) {
+    const localizedMessage = new LocalizedMessage(userLocale);
     let slicePos = isFileEnd ? currentIndex + 1 : currentIndex;
     throw new Error(
-      `[Exceeded Time Limit]\nThe execution time of Unshare is limited to ${
-        ADDON_EXEC_TIME_LIMIT_IN_MILLISEC / 1000
-      } seconds by Google. It could not finish "un"sharing the following file(s)/folder(s) due to this limit:\n${originalFileArray
-        .slice(slicePos)
-        .map((file) => file.fileName)
-        .join('\n')}`
+      localizedMessage.replaceErrorExceededTimeLimit(
+        ADDON_EXEC_TIME_LIMIT_IN_MILLISEC / 1000,
+        originalFileArray
+          .slice(slicePos)
+          .map((file) => file.fileName)
+          .join('\n')
+      )
     );
   } else {
     return null;
