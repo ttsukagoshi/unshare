@@ -1,4 +1,4 @@
-# Unshare - Share no more
+# Unshare
 [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg?style=flat-square)](https://github.com/google/clasp) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)  
 [![Lint Code Base](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml) [![Deploy](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml)
 
@@ -6,7 +6,7 @@ Open-sourced Google Workspace Add-on to "un"share Google Drive files that you ow
 
 ## Overview
 
-Unshare is a Google Workspace Add-on to bulk delete all editors, commenters, and viewers from the selected Google Drive file/folder except for you, the owner. If the target file/folder is shared with a class of users who have general access, for example, if it is shared with the user's domain, that access setting will be changed to Private, where only the users explicitly granted permission can access.
+Unshare is a Google Workspace Add-on to bulk remove all editors, commenters, and viewers from the selected Google Drive file/folder except for you, the owner. If the target file/folder is shared with a class of users who have general access, for example, if it is shared with the user's domain, that access setting will be changed to Private, where only the users explicitly granted permission can access.
 
 ## How to use
 
