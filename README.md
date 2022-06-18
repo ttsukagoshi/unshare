@@ -1,6 +1,7 @@
 # Unshare
+
 [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg?style=flat-square)](https://github.com/google/clasp) [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)  
-[![Lint Code Base](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml) [![Deploy](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml)
+[![Lint Code Base](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/linter.yml) [![CodeQL](https://github.com/ttsukagoshi/unshare/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/codeql-analysis.yml) [![Deploy](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml/badge.svg)](https://github.com/ttsukagoshi/unshare/actions/workflows/deploy.yml)
 
 Open-sourced Google Workspace Add-on to "un"share Google Drive files that you own with a tap.
 
