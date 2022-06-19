@@ -7,6 +7,8 @@ Open-sourced Google Workspace Add-on to "un"share Google Drive files that you ow
 
 ## Overview
 
+![Unshare icon](https://lh3.googleusercontent.com/pw/AM-JKLUeE_Ws9D1PaPh9_8CVmjpbscs1hQc8viJ_eBoZQ6OdolI3GyNrfAoWAy3w7hhvM2NSWY1EdFLsvCu2j5U7gtExx7Ou5uEctsImUiIvzDlKFRJl0LwRVqBMD7j2FHAiIsfS0-Vy7aFn5kaDh4MSvXZ4=s96-no)
+
 Unshare is a Google Workspace Add-on to bulk remove all editors, commenters, and viewers from the selected Google Drive file/folder except for you, the owner. If the target file/folder is shared with a class of users who have general access, for example, if it is shared with the user's domain, that access setting will be changed to Private, where only the users explicitly granted permission can access.
 
 ## How to use
