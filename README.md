@@ -15,9 +15,7 @@ Unshare is a Google Workspace Add-on to bulk remove all editors, commenters, and
 
 ### 1. Install the add-on
 
-> This add-on is currently under review by Google. It will be made available on the Google Workspace Marketplace as soon as the verification is complete.
-
-Install this add-on from the Google Workspace Marketplace. You have only to do this once per user; updates to the add-on will be automatically distributed via the Marketplace.
+Install this add-on from [the Google Workspace Marketplace](https://workspace.google.com/marketplace/app/unshare/493847743062). You have only to do this once per user; updates to the add-on will be automatically distributed via the Marketplace.
 
 ### 2. Select target file/folder(s)
 
