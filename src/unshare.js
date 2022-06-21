@@ -199,7 +199,7 @@ class LocalizedMessage {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildHomepage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -245,7 +245,7 @@ function buildHomepage(event) {
  * @see https://developers.google.com/apps-script/add-ons/drive/building-drive-interfaces#drive_homepages
  */
 function buildDriveHomepage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -282,7 +282,7 @@ function buildDriveItemsSelected(event) {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildConfirmationPage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -364,7 +364,7 @@ function buildConfirmationPage(event) {
 }
 
 function unshare(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -512,7 +512,7 @@ function getFileUsers(event, useCache = false) {
     },
     { isOwner: [], isNotOwner: [] }
   );
-  console.log(JSON.stringify(fileUsers)); // debug
+  // console.log(JSON.stringify(fileUsers)); // debug
   return fileUsers;
 }
 
@@ -566,11 +566,16 @@ function filteredErrorMessage(error) {
 
 if (typeof module === 'object') {
   module.exports = {
+    ADDON_EXEC_TIME_LIMIT_IN_MILLISEC,
+    ADDON_EXEC_TIME_LIMIT_WITH_BUFFER,
     buildHomepage,
     buildDriveHomepage,
     buildDriveItemsSelected,
     buildConfirmationPage,
+    checkExecTime,
     filteredErrorMessage,
+    LocalizedMessage,
+    MESSAGES,
     unshare,
   };
 }
