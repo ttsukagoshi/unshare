@@ -570,6 +570,7 @@ if (typeof module === 'object') {
     buildDriveHomepage,
     buildDriveItemsSelected,
     buildConfirmationPage,
+    filteredErrorMessage,
     unshare,
   };
 }
