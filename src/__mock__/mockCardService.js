@@ -1,4 +1,7 @@
 class MockCardService {
+  static TextButtonStyle = {
+    FILLED: 'FILLED',
+  };
   static newCardBuilder() {
     return new MockCardBuilder();
   }
@@ -104,6 +107,7 @@ class MockFixedFooter {
 class MockTextButton {
   constructor() {
     this.text = '';
+    this.textButtonStyle = '';
     this.openLink = '';
     this.onClickAction = {};
   }
@@ -115,6 +119,19 @@ class MockTextButton {
     this.text = text;
     return this;
   }
+  /**
+   * @param {String} cardTextButtonStyle
+   * @returns This MockTextButton, for chaining
+   */
+  setTextButtonStyle(cardTextButtonStyle) {
+    this.textButtonStyle = cardTextButtonStyle;
+    return this;
+  }
+  /**
+   *
+   * @param {Object} cardAction
+   * @returns This MockTextButton, for chaining
+   */
   setOnClickAction(cardAction) {
     this.onClickAction = cardAction.output();
     return this;
@@ -130,6 +147,7 @@ class MockTextButton {
   output() {
     return {
       text: this.text,
+      textButtonStyle: this.textButtonStyle,
       onClickAction: this.onClickAction,
       openLink: this.openLink,
     };
