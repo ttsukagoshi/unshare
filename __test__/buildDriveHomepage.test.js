@@ -1,36 +1,28 @@
-const { LocalizedMessage, buildDriveHomepage } = require('../src/unshare');
-const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
-const inputPatterns = MOCK_USER_LOCALES.map((userLocale) => {
-  return {
-    userLocale: userLocale,
-    input: {
-      testName: `buildDriveHomepage in ${userLocale}`,
-      event: {
-        commonEventObject: {
-          platform: 'WEB',
-          hostApp: 'DRIVE',
-          userLocale: userLocale,
-        },
-      },
+const { buildDriveHomepage } = require('../src/unshare');
+const input = {
+  testName: 'Check buildDriveHomepage in en',
+  event: {
+    commonEventObject: {
+      platform: 'WEB',
+      hostApp: 'DRIVE',
+      userLocale: 'en',
     },
-  };
-});
-const expectedOutputs = MOCK_USER_LOCALES.reduce((obj, userLocale) => {
-  let localizedMessage = new LocalizedMessage(userLocale);
-  obj[userLocale] = {
-    sections: [
-      {
-        widgets: [{ text: localizedMessage.messageList.homepageDriveText }],
-      },
-    ],
-  };
-  return obj;
-}, {});
+  },
+};
 
-inputPatterns.forEach((inputPattern) => {
-  test(inputPattern.input.testName, () => {
-    expect(buildDriveHomepage(inputPattern.input.event)).toEqual(
-      expectedOutputs[inputPattern.userLocale]
-    );
-  });
+const expectedOutput = {
+  sections: [
+    {
+      widgets: [
+        {
+          // localizedMessage.messageList.homepageDriveText
+          text: 'Select file(s) that you want to "un"share. Only the file/folder(s) that you own can be processed.',
+        },
+      ],
+    },
+  ],
+};
+
+test(input.testName, () => {
+  expect(buildDriveHomepage(input.event)).toEqual(expectedOutput);
 });
