@@ -2,7 +2,7 @@ const { filteredErrorMessage } = require('../src/unshare');
 const patterns = [
   {
     patternName: 'Message starting with "[ERROR]"',
-    testInput: {
+    input: {
       message: '[ERROR] This is a test message',
       stack: '"[ERROR]" error stack with line numbers',
     },
@@ -10,7 +10,7 @@ const patterns = [
   },
   {
     patternName: 'Message starting with "[Exceeded Time Limit]"',
-    testInput: {
+    input: {
       message: '[Exceeded Time Limit]\nThis is a test message',
       stack: '"[Exceeded Time Limit]" error stack with line numbers',
     },
@@ -18,7 +18,7 @@ const patterns = [
   },
   {
     patternName: 'Unspecified error message',
-    testInput: {
+    input: {
       message: 'This is a test message',
       stack: 'Error stack with line numbers',
     },
@@ -28,8 +28,6 @@ const patterns = [
 
 patterns.forEach((pattern) => {
   test(pattern.patternName, () => {
-    expect(filteredErrorMessage(pattern.testInput)).toBe(
-      pattern.expectedOutput
-    );
+    expect(filteredErrorMessage(pattern.input)).toBe(pattern.expectedOutput);
   });
 });
