@@ -1,6 +1,6 @@
-const { MESSAGES, LocalizedMessage, buildHomepage } = require('../src/unshare');
-const userLocales = Object.keys(MESSAGES).concat(['en_GB', 'zz']);
-const inputPatterns = userLocales.map((userLocale) => {
+const { LocalizedMessage, buildHomepage } = require('../src/unshare');
+const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
+const inputPatterns = MOCK_USER_LOCALES.map((userLocale) => {
   return {
     userLocale: userLocale,
     input: {
@@ -15,7 +15,7 @@ const inputPatterns = userLocales.map((userLocale) => {
     },
   };
 });
-const expectedOutputs = userLocales.reduce((obj, userLocale) => {
+const expectedOutputs = MOCK_USER_LOCALES.reduce((obj, userLocale) => {
   let localizedMessage = new LocalizedMessage(userLocale);
   obj[userLocale] = {
     sections: [

@@ -2,7 +2,6 @@ const {
   ADDON_EXEC_TIME_LIMIT_IN_MILLISEC,
   checkExecTime,
   LocalizedMessage,
-  MESSAGES,
 } = require('../src/unshare');
 const now = new Date();
 const currentIndex = 1;
@@ -11,7 +10,7 @@ const originalFileArray = [
   { id: 'fileId2', fileName: 'fileName2' },
   { id: 'fileId3', fileName: 'fileName3' },
 ];
-const userLocales = Object.keys(MESSAGES).concat(['en_GB', 'zz']);
+const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
 
 const patterns = [
   {
@@ -43,7 +42,7 @@ const patterns = [
   },
 ];
 
-let mappedPatterns = userLocales.reduce((arr, userLocale) => {
+let mappedPatterns = MOCK_USER_LOCALES.reduce((arr, userLocale) => {
   patterns.forEach((pattern) => {
     let localizedMessage = new LocalizedMessage(userLocale);
     let copyPattern = {
