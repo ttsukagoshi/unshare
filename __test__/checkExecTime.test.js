@@ -1,26 +1,25 @@
 const {
   ADDON_EXEC_TIME_LIMIT_IN_MILLISEC,
   checkExecTime,
-  LocalizedMessage,
 } = require('../src/unshare');
 const now = new Date();
+const userLocale = 'en';
 const currentIndex = 1;
 const originalFileArray = [
   { id: 'fileId1', fileName: 'fileName1' },
   { id: 'fileId2', fileName: 'fileName2' },
   { id: 'fileId3', fileName: 'fileName3' },
 ];
-const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
 
 const patterns = [
   {
-    patternName: 'checkExecTime: Within time limit',
+    patternName: 'Check checkExecTime: Within time limit',
     input: {
       withinTimelimit: true,
       startTime: now,
       isFileEnd: false,
-      slicePos: currentIndex,
     },
+    expectedOutput: null,
   },
   {
     patternName: 'checkExecTime: Exceed time limit, File end: true',
@@ -28,8 +27,13 @@ const patterns = [
       withinTimelimit: false,
       startTime: new Date(now.getTime() - ADDON_EXEC_TIME_LIMIT_IN_MILLISEC),
       isFileEnd: true,
-      slicePos: currentIndex + 1,
     },
+    expectedOutput: `[Exceeded Time Limit]\nThe execution time of Unshare is limited to ${
+      ADDON_EXEC_TIME_LIMIT_IN_MILLISEC / 1000
+    } seconds by Google. It could not finish "un"sharing the following file/folder(s) due to this limit:\n${originalFileArray
+      .slice(currentIndex + 1)
+      .map((file) => file.fileName)
+      .join('\n')}`, // localizedMessage.replaceErrorExceededTimeLimit
   },
   {
     patternName: 'checkExecTime: Exceed time limit, File end: false',
@@ -37,39 +41,17 @@ const patterns = [
       withinTimelimit: false,
       startTime: new Date(now.getTime() - ADDON_EXEC_TIME_LIMIT_IN_MILLISEC),
       isFileEnd: false,
-      slicePos: currentIndex,
     },
+    expectedOutput: `[Exceeded Time Limit]\nThe execution time of Unshare is limited to ${
+      ADDON_EXEC_TIME_LIMIT_IN_MILLISEC / 1000
+    } seconds by Google. It could not finish "un"sharing the following file/folder(s) due to this limit:\n${originalFileArray
+      .slice(currentIndex)
+      .map((file) => file.fileName)
+      .join('\n')}`, // localizedMessage.replaceErrorExceededTimeLimit
   },
 ];
 
-let mappedPatterns = MOCK_USER_LOCALES.reduce((arr, userLocale) => {
-  patterns.forEach((pattern) => {
-    let localizedMessage = new LocalizedMessage(userLocale);
-    let copyPattern = {
-      patternName: `${pattern.patternName}, userLocale: ${userLocale}`,
-      input: {
-        userLocale: userLocale,
-        withinTimelimit: pattern.input.withinTimelimit,
-        startTime: pattern.input.startTime,
-        isFileEnd: pattern.input.isFileEnd,
-        slicePos: pattern.input.slicePos,
-      },
-      expectedOutput: pattern.input.withinTimelimit
-        ? null
-        : localizedMessage.replaceErrorExceededTimeLimit(
-            ADDON_EXEC_TIME_LIMIT_IN_MILLISEC / 1000,
-            originalFileArray
-              .slice(pattern.input.slicePos)
-              .map((file) => file.fileName)
-              .join('\n')
-          ),
-    };
-    arr.push(copyPattern);
-  });
-  return arr;
-}, []);
-
-mappedPatterns.forEach((pattern) => {
+patterns.forEach((pattern) => {
   test(pattern.patternName, () => {
     if (pattern.input.withinTimelimit) {
       expect(
@@ -77,7 +59,7 @@ mappedPatterns.forEach((pattern) => {
           pattern.input.startTime,
           currentIndex,
           originalFileArray,
-          pattern.input.userLocale,
+          userLocale,
           pattern.input.isFileEnd
         )
       ).toBe(pattern.expectedOutput);
@@ -87,7 +69,7 @@ mappedPatterns.forEach((pattern) => {
           pattern.input.startTime,
           currentIndex,
           originalFileArray,
-          pattern.input.userLocale,
+          userLocale,
           pattern.input.isFileEnd
         );
       }).toThrowError(new Error(pattern.expectedOutput));

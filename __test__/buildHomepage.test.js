@@ -1,67 +1,57 @@
-const {
-  LocalizedMessage,
-  buildHomepage,
-  buildDriveItemsSelected,
-} = require('../src/unshare');
-const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
-const inputPatterns = MOCK_USER_LOCALES.map((userLocale) => {
-  return {
-    userLocale: userLocale,
-    inputBuildHomepage: {
-      testName: `buildHomepage in ${userLocale}`,
-      event: {
-        commonEventObject: {
-          platform: 'WEB',
-          hostApp: 'SHEETS',
-          userLocale: userLocale,
-        },
-      },
+const { buildHomepage, buildDriveItemsSelected } = require('../src/unshare');
+const inputBuildHomepage = {
+  testName: 'Check buildHomepage in en',
+  event: {
+    commonEventObject: {
+      platform: 'WEB',
+      hostApp: 'SHEETS',
+      userLocale: 'en',
     },
-    inputBuildDriveItemsSelected: {
-      testName: `buildDriveItemsSelected in ${userLocale}`,
-      event: {
-        commonEventObject: {
-          platform: 'WEB',
-          hostApp: 'DRIVE',
-          userLocale: userLocale,
-        },
-      },
+  },
+};
+const inputBuildDriveItemsSelected = {
+  testName: 'Check buildDriveItemsSelected in en',
+  event: {
+    commonEventObject: {
+      platform: 'WEB',
+      hostApp: 'DRIVE',
+      userLocale: 'en',
     },
-  };
-});
-const expectedOutputs = MOCK_USER_LOCALES.reduce((obj, userLocale) => {
-  let localizedMessage = new LocalizedMessage(userLocale);
-  obj[userLocale] = {
-    sections: [
-      {
-        widgets: [{ text: localizedMessage.messageList.homepageText }],
-      },
-    ],
-    fixedFooter: {
-      primaryButton: {
-        text: localizedMessage.messageList.buttonContinue,
-        onClickAction: { functionName: 'buildConfirmationPage' },
-        openLink: '',
-      },
-      secondaryButton: {
-        text: localizedMessage.messageList.buttonHelp,
-        onClickAction: {},
-        openLink: 'https://www.scriptable-assets.page/add-ons/unshare/',
-      },
-    },
-  };
-  return obj;
-}, {});
+  },
+};
 
-inputPatterns.forEach((inputPattern) => {
-  test(inputPattern.inputBuildHomepage.testName, () => {
-    expect(buildHomepage(inputPattern.inputBuildHomepage.event)).toEqual(
-      expectedOutputs[inputPattern.userLocale]
-    );
-  });
-  test(inputPattern.inputBuildDriveItemsSelected.testName, () => {
-    expect(
-      buildDriveItemsSelected(inputPattern.inputBuildDriveItemsSelected.event)
-    ).toEqual(expectedOutputs[inputPattern.userLocale]);
-  });
+const expectedOutput = {
+  sections: [
+    {
+      widgets: [
+        {
+          // localizedMessage.messageList.homepageText
+          text: 'Press the "Continue" button to stop sharing the files with your collaborators.\n\nUnshare will delete all editors, commenters, and viewers from this file/folder except for you, the owner. If the target file/folder is shared with a class of users who have general access, for example, if it is shared with the user\'s domain, that access setting will be changed to Private, where only the users explicitly granted permission can access.\n\n<b>THIS PROCESS CANNOT BE UNDONE in Unshare</b>.',
+        },
+      ],
+    },
+  ],
+  fixedFooter: {
+    primaryButton: {
+      text: 'CONTINUE', // localizedMessage.messageList.buttonContinue
+      textButtonStyle: '',
+      onClickAction: { functionName: 'buildConfirmationPage' },
+      openLink: '',
+    },
+    secondaryButton: {
+      text: 'HELP', // localizedMessage.messageList.buttonHelp
+      textButtonStyle: '',
+      onClickAction: {},
+      openLink: 'https://www.scriptable-assets.page/add-ons/unshare/',
+    },
+  },
+};
+
+test(inputBuildHomepage.testName, () => {
+  expect(buildHomepage(inputBuildHomepage.event)).toEqual(expectedOutput);
+});
+test(inputBuildDriveItemsSelected.testName, () => {
+  expect(buildDriveItemsSelected(inputBuildDriveItemsSelected.event)).toEqual(
+    expectedOutput
+  );
 });
