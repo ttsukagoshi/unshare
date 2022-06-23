@@ -1,7 +1,7 @@
 const { filteredErrorMessage } = require('../src/unshare');
 const patterns = [
   {
-    patternName: 'Error message starting with "[ERROR]"',
+    patternName: 'Message starting with "[ERROR]"',
     testInput: {
       message: '[ERROR] This is a test message',
       stack: '"[ERROR]" error stack with line numbers',
@@ -9,7 +9,7 @@ const patterns = [
     expectedOutput: '[ERROR] This is a test message',
   },
   {
-    patternName: 'Error message starting with "[Exceeded Time Limit]"',
+    patternName: 'Message starting with "[Exceeded Time Limit]"',
     testInput: {
       message: '[Exceeded Time Limit]\nThis is a test message',
       stack: '"[Exceeded Time Limit]" error stack with line numbers',
