@@ -1,14 +1,28 @@
-const { LocalizedMessage, buildHomepage } = require('../src/unshare');
+const {
+  LocalizedMessage,
+  buildHomepage,
+  buildDriveItemsSelected,
+} = require('../src/unshare');
 const { MOCK_USER_LOCALES } = require('../src/__mock__/mockUserLocales');
 const inputPatterns = MOCK_USER_LOCALES.map((userLocale) => {
   return {
     userLocale: userLocale,
-    input: {
+    inputBuildHomepage: {
       testName: `buildHomepage in ${userLocale}`,
       event: {
         commonEventObject: {
           platform: 'WEB',
           hostApp: 'SHEETS',
+          userLocale: userLocale,
+        },
+      },
+    },
+    inputBuildDriveItemsSelected: {
+      testName: `buildDriveItemsSelected in ${userLocale}`,
+      event: {
+        commonEventObject: {
+          platform: 'WEB',
+          hostApp: 'DRIVE',
           userLocale: userLocale,
         },
       },
@@ -40,9 +54,14 @@ const expectedOutputs = MOCK_USER_LOCALES.reduce((obj, userLocale) => {
 }, {});
 
 inputPatterns.forEach((inputPattern) => {
-  test(inputPattern.input.testName, () => {
-    expect(buildHomepage(inputPattern.input.event)).toEqual(
+  test(inputPattern.inputBuildHomepage.testName, () => {
+    expect(buildHomepage(inputPattern.inputBuildHomepage.event)).toEqual(
       expectedOutputs[inputPattern.userLocale]
     );
+  });
+  test(inputPattern.inputBuildDriveItemsSelected.testName, () => {
+    expect(
+      buildDriveItemsSelected(inputPattern.inputBuildDriveItemsSelected.event)
+    ).toEqual(expectedOutputs[inputPattern.userLocale]);
   });
 });
