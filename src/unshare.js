@@ -16,6 +16,11 @@
    See the GitHub repository for more details: https://github.com/ttsukagoshi/unshare
 */
 
+if (!CardService) {
+  const { MockCardService } = require('./__mock__/mockCardService');
+  var CardService = MockCardService;
+}
+
 const CACHE_EXPIRATION_IN_SEC = 3600; // TTL of user cache in seconds
 const ADDON_EXEC_TIME_LIMIT_IN_MILLISEC = 30 * 1000; // Execution time limit of Google Workspace Add-ons in milliseconds, as specified in https://developers.google.com/apps-script/add-ons/concepts/actions#callback_functions
 const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
