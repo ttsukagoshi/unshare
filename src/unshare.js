@@ -578,6 +578,7 @@ if (typeof module === 'object') {
     buildDriveItemsSelected,
     buildConfirmationPage,
     checkExecTime,
+    createMessageCard,
     filteredErrorMessage,
     LocalizedMessage,
     MESSAGES,
