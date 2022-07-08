@@ -16,9 +16,31 @@
    See the GitHub repository for more details: https://github.com/ttsukagoshi/unshare
 */
 
+if (!CacheService) {
+  const { MockCacheService } = require('./__mock__/mockCacheService');
+  var CacheService = MockCacheService;
+}
 if (!CardService) {
   const { MockCardService } = require('./__mock__/mockCardService');
   var CardService = MockCardService;
+}
+if (!DriveApp) {
+  const { MockDriveApp } = require('./__mock__/mockDriveApp');
+  var DriveApp = MockDriveApp;
+}
+if (!Session) {
+  const { MockSession } = require('./__mock__/mockSession');
+  var Session = MockSession;
+}
+if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
+  const {
+    MockSpreadsheetApp,
+    MockDocumentApp,
+    MockSlidesApp,
+  } = require('./__mock__/mockEditorApp');
+  var SpreadsheetApp = MockSpreadsheetApp,
+    DocumentApp = MockDocumentApp,
+    SlidesApp = MockSlidesApp;
 }
 
 const CACHE_EXPIRATION_IN_SEC = 3600; // TTL of user cache in seconds
@@ -580,6 +602,7 @@ if (typeof module === 'object') {
     checkExecTime,
     createMessageCard,
     filteredErrorMessage,
+    getFileUsers,
     LocalizedMessage,
     MESSAGES,
     unshare,
