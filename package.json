@@ -1,6 +1,6 @@
 {
   "name": "unshare",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Open-sourced Google Workspace Add-on to \"un\"share Google Drive files that you own with a tap",
   "main": "unshare.js",
   "scripts": {
