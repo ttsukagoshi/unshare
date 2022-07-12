@@ -100,7 +100,7 @@ const EVENT_DRIVE_SELECTED = {
         title: 'mock_sheets_file2_not_owner',
       },
       {
-        title: 'mock docs file',
+        title: 'mock_docs_file',
         iconUrl:
           'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document',
         id: 'id003docs',
@@ -134,6 +134,38 @@ const EVENT_DRIVE_SELECTED = {
   userCountry: '',
 };
 
+const EVENT_DRIVE_SELECTED_NOT_OWNER_FILE = {
+  clientPlatform: 'web',
+  userLocale: 'en',
+  commonEventObject: {
+    userLocale: 'en',
+    timeZone: { offset: 32400000, id: 'Asia/Dili' },
+    platform: 'WEB',
+    hostApp: 'DRIVE',
+  },
+  drive: {
+    activeCursorItem: {
+      mimeType: 'application/vnd.google-apps.spreadsheet',
+      iconUrl:
+        'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet',
+      id: 'id002sheets',
+      title: 'mock_sheets_file2_not_owner',
+    },
+    selectedItems: [
+      {
+        mimeType: 'application/vnd.google-apps.spreadsheet',
+        iconUrl:
+          'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet',
+        id: 'id002sheets',
+        title: 'mock_sheets_file2_not_owner',
+      },
+    ],
+  },
+  userTimezone: { id: 'Asia/Dili', offSet: '32400000' },
+  hostApp: 'drive',
+  userCountry: '',
+};
+
 module.exports = {
   EVENT_SHEETS,
   EVENT_DOCS,
@@ -141,4 +173,5 @@ module.exports = {
   EVENT_UNKNOWN_PLATFORM,
   EVENT_DRIVE_HOME,
   EVENT_DRIVE_SELECTED,
+  EVENT_DRIVE_SELECTED_NOT_OWNER_FILE,
 };

@@ -375,7 +375,7 @@ function buildConfirmationPage(event) {
       return builder.build();
     } else {
       let isNotOwnerFileNameList = fileUsers.isNotOwner
-        .map((isNotOwnerFile) => ` - ${isNotOwnerFile.fileName}`)
+        .map((isNotOwnerFile) => ` * ${isNotOwnerFile.fileName}`)
         .join('\n');
       throw new Error(
         localizedMessage.replaceErrorYouMustBeOwner(isNotOwnerFileNameList)
