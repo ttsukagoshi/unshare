@@ -5,7 +5,7 @@ const {
   EVENT_SLIDES,
   EVENT_UNKNOWN_PLATFORM,
   EVENT_DRIVE_SELECTED,
-} = require('../src/__mock__/mockEvents');
+} = require('../src/__mocks__/mockEvents');
 
 const patterns = [
   {

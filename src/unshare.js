@@ -17,19 +17,19 @@
 */
 
 if (!CacheService) {
-  const { MockCacheService } = require('./__mock__/mockCacheService');
+  const { MockCacheService } = require('./__mocks__/mockCacheService');
   var CacheService = MockCacheService;
 }
 if (!CardService) {
-  const { MockCardService } = require('./__mock__/mockCardService');
+  const { MockCardService } = require('./__mocks__/mockCardService');
   var CardService = MockCardService;
 }
 if (!DriveApp) {
-  const { MockDriveApp } = require('./__mock__/mockDriveApp');
+  const { MockDriveApp } = require('./__mocks__/mockDriveApp');
   var DriveApp = MockDriveApp;
 }
 if (!Session) {
-  const { MockSession } = require('./__mock__/mockSession');
+  const { MockSession } = require('./__mocks__/mockSession');
   var Session = MockSession;
 }
 if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
@@ -37,7 +37,7 @@ if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
     MockSpreadsheetApp,
     MockDocumentApp,
     MockSlidesApp,
-  } = require('./__mock__/mockEditorApp');
+  } = require('./__mocks__/mockEditorApp');
   var SpreadsheetApp = MockSpreadsheetApp,
     DocumentApp = MockDocumentApp,
     SlidesApp = MockSlidesApp;
