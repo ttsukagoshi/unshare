@@ -1,5 +1,5 @@
 const { unshare } = require('../src/unshare');
-const { EVENT_DRIVE_SELECTED } = require('../src/__mock__/mockEvents');
+const { EVENT_DRIVE_SELECTED } = require('../src/__mocks__/mockEvents');
 
 const patterns = [
   {

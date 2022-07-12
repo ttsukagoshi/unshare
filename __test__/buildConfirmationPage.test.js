@@ -3,7 +3,7 @@ const {
   EVENT_DRIVE_SELECTED,
   EVENT_SHEETS,
   EVENT_DRIVE_SELECTED_NOT_OWNER_FILE,
-} = require('../src/__mock__/mockEvents');
+} = require('../src/__mocks__/mockEvents');
 
 const patterns = [
   {
