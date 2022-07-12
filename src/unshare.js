@@ -16,6 +16,33 @@
    See the GitHub repository for more details: https://github.com/ttsukagoshi/unshare
 */
 
+if (!CacheService) {
+  const { MockCacheService } = require('./__mocks__/mockCacheService');
+  var CacheService = MockCacheService;
+}
+if (!CardService) {
+  const { MockCardService } = require('./__mocks__/mockCardService');
+  var CardService = MockCardService;
+}
+if (!DriveApp) {
+  const { MockDriveApp } = require('./__mocks__/mockDriveApp');
+  var DriveApp = MockDriveApp;
+}
+if (!Session) {
+  const { MockSession } = require('./__mocks__/mockSession');
+  var Session = MockSession;
+}
+if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
+  const {
+    MockSpreadsheetApp,
+    MockDocumentApp,
+    MockSlidesApp,
+  } = require('./__mocks__/mockEditorApp');
+  var SpreadsheetApp = MockSpreadsheetApp,
+    DocumentApp = MockDocumentApp,
+    SlidesApp = MockSlidesApp;
+}
+
 const CACHE_EXPIRATION_IN_SEC = 3600; // TTL of user cache in seconds
 const ADDON_EXEC_TIME_LIMIT_IN_MILLISEC = 30 * 1000; // Execution time limit of Google Workspace Add-ons in milliseconds, as specified in https://developers.google.com/apps-script/add-ons/concepts/actions#callback_functions
 const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
@@ -199,7 +226,7 @@ class LocalizedMessage {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildHomepage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -245,7 +272,7 @@ function buildHomepage(event) {
  * @see https://developers.google.com/apps-script/add-ons/drive/building-drive-interfaces#drive_homepages
  */
 function buildDriveHomepage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -282,7 +309,7 @@ function buildDriveItemsSelected(event) {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildConfirmationPage(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -348,7 +375,7 @@ function buildConfirmationPage(event) {
       return builder.build();
     } else {
       let isNotOwnerFileNameList = fileUsers.isNotOwner
-        .map((isNotOwnerFile) => ` - ${isNotOwnerFile.fileName}`)
+        .map((isNotOwnerFile) => ` * ${isNotOwnerFile.fileName}`)
         .join('\n');
       throw new Error(
         localizedMessage.replaceErrorYouMustBeOwner(isNotOwnerFileNameList)
@@ -364,7 +391,7 @@ function buildConfirmationPage(event) {
 }
 
 function unshare(event) {
-  console.log(JSON.stringify(event)); // debug
+  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale
@@ -512,7 +539,7 @@ function getFileUsers(event, useCache = false) {
     },
     { isOwner: [], isNotOwner: [] }
   );
-  console.log(JSON.stringify(fileUsers)); // debug
+  // console.log(JSON.stringify(fileUsers)); // debug
   return fileUsers;
 }
 
@@ -566,10 +593,18 @@ function filteredErrorMessage(error) {
 
 if (typeof module === 'object') {
   module.exports = {
+    ADDON_EXEC_TIME_LIMIT_IN_MILLISEC,
+    ADDON_EXEC_TIME_LIMIT_WITH_BUFFER,
     buildHomepage,
     buildDriveHomepage,
     buildDriveItemsSelected,
     buildConfirmationPage,
+    checkExecTime,
+    createMessageCard,
+    filteredErrorMessage,
+    getFileUsers,
+    LocalizedMessage,
+    MESSAGES,
     unshare,
   };
 }

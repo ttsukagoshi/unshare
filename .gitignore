@@ -6,3 +6,6 @@ node_modules/
 
 # clasp
 .clasp.json
+
+# jest
+coverage/
