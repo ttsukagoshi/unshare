@@ -27,7 +27,7 @@
   "homepage": "https://github.com/ttsukagoshi/unshare#readme",
   "devDependencies": {
     "@google/clasp": "^2.4.2",
-    "@types/google-apps-script": "^1.0.64",
+    "@types/google-apps-script": "^1.0.76",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.44.0",
