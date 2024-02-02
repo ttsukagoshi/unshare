@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { getFileUsers } = require('../src/unshare');
 const {
   EVENT_SHEETS,
@@ -5,6 +6,7 @@ const {
   EVENT_SLIDES,
   EVENT_UNKNOWN_PLATFORM,
   EVENT_DRIVE_SELECTED,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('../src/__mocks__/mockEvents');
 
 const patterns = [
@@ -130,6 +132,6 @@ test('Check getFileUsers: Unknown host app', () => {
   expect(() => {
     getFileUsers(EVENT_UNKNOWN_PLATFORM);
   }).toThrowError(
-    new Error('[ERROR] Unshare is not available on this platform.')
+    new Error('[ERROR] Unshare is not available on this platform.'),
   );
 });

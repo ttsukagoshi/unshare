@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createMessageCard } = require('../src/unshare');
 const TEST_MESSAGE = 'This is a test message for createMessageCard';
 const USER_LOCALE = 'en';
@@ -52,7 +53,7 @@ const patterns = [
 patterns.forEach((pattern) => {
   test(pattern.testName, () => {
     expect(
-      createMessageCard(TEST_MESSAGE, USER_LOCALE, pattern.input.isHostDrive)
+      createMessageCard(TEST_MESSAGE, USER_LOCALE, pattern.input.isHostDrive),
     ).toEqual(pattern.expectedOutput);
   });
 });

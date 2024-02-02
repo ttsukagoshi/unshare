@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { buildHomepage, buildDriveItemsSelected } = require('../src/unshare');
 const inputBuildHomepage = {
   testName: 'Check buildHomepage in en',
@@ -52,6 +53,6 @@ test(inputBuildHomepage.testName, () => {
 });
 test(inputBuildDriveItemsSelected.testName, () => {
   expect(buildDriveItemsSelected(inputBuildDriveItemsSelected.event)).toEqual(
-    expectedOutput
+    expectedOutput,
   );
 });
