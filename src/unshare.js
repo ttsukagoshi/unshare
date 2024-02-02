@@ -17,18 +17,22 @@
 */
 
 if (!CacheService) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { MockCacheService } = require('./__mocks__/mockCacheService');
   var CacheService = MockCacheService;
 }
 if (!CardService) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { MockCardService } = require('./__mocks__/mockCardService');
   var CardService = MockCardService;
 }
 if (!DriveApp) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { MockDriveApp } = require('./__mocks__/mockDriveApp');
   var DriveApp = MockDriveApp;
 }
 if (!Session) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { MockSession } = require('./__mocks__/mockSession');
   var Session = MockSession;
 }
@@ -37,6 +41,7 @@ if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
     MockSpreadsheetApp,
     MockDocumentApp,
     MockSlidesApp,
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
   } = require('./__mocks__/mockEditorApp');
   var SpreadsheetApp = MockSpreadsheetApp,
     DocumentApp = MockDocumentApp,
