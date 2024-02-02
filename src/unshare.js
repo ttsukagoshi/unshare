@@ -148,7 +148,7 @@ class LocalizedMessage {
   replacePlaceholders_(text, placeholderValues = []) {
     let replacedText = placeholderValues.reduce(
       (acc, cur) => acc.replace(new RegExp(cur.regexp, 'g'), cur.value),
-      text
+      text,
     );
     return replacedText;
   }
@@ -229,7 +229,7 @@ function buildHomepage(event) {
   // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
-    event.commonEventObject.userLocale
+    event.commonEventObject.userLocale,
   );
   // Build card
   let builder = CardService.newCardBuilder();
@@ -237,9 +237,9 @@ function buildHomepage(event) {
   builder.addSection(
     CardService.newCardSection().addWidget(
       CardService.newTextParagraph().setText(
-        localizedMessage.messageList.homepageText
-      )
-    )
+        localizedMessage.messageList.homepageText,
+      ),
+    ),
   );
   // Fixed Footer
   builder.setFixedFooter(
@@ -248,18 +248,18 @@ function buildHomepage(event) {
         CardService.newTextButton()
           .setText(localizedMessage.messageList.buttonContinue)
           .setOnClickAction(
-            CardService.newAction().setFunctionName('buildConfirmationPage')
-          )
+            CardService.newAction().setFunctionName('buildConfirmationPage'),
+          ),
       )
       .setSecondaryButton(
         CardService.newTextButton()
           .setText(localizedMessage.messageList.buttonHelp)
           .setOpenLink(
             CardService.newOpenLink().setUrl(
-              'https://www.scriptable-assets.page/add-ons/unshare/'
-            )
-          )
-      )
+              'https://www.scriptable-assets.page/add-ons/unshare/',
+            ),
+          ),
+      ),
   );
   return builder.build();
 }
@@ -275,7 +275,7 @@ function buildDriveHomepage(event) {
   // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
-    event.commonEventObject.userLocale
+    event.commonEventObject.userLocale,
   );
   // Build card
   let builder = CardService.newCardBuilder();
@@ -283,9 +283,9 @@ function buildDriveHomepage(event) {
   builder.addSection(
     CardService.newCardSection().addWidget(
       CardService.newTextParagraph().setText(
-        localizedMessage.messageList.homepageDriveText
-      )
-    )
+        localizedMessage.messageList.homepageDriveText,
+      ),
+    ),
   );
   return builder.build();
 }
@@ -312,7 +312,7 @@ function buildConfirmationPage(event) {
   // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
-    event.commonEventObject.userLocale
+    event.commonEventObject.userLocale,
   );
   let isHostDrive = event.commonEventObject.hostApp === 'DRIVE';
   try {
@@ -322,13 +322,13 @@ function buildConfirmationPage(event) {
         let editorList = file.editors
           .map(
             (editor) =>
-              ` - ${editor} (${localizedMessage.messageList.userAccessEditor})`
+              ` - ${editor} (${localizedMessage.messageList.userAccessEditor})`,
           )
           .join('\n');
         let viewerList = file.viewers
           .map(
             (viewer) =>
-              ` - ${viewer} (${localizedMessage.messageList.userAccessViewer}/${localizedMessage.messageList.userAccessCommenter})`
+              ` - ${viewer} (${localizedMessage.messageList.userAccessViewer}/${localizedMessage.messageList.userAccessCommenter})`,
           )
           .join('\n');
         text += `\n<b>${file.fileName}</b>\n${editorList}\n${viewerList}\n`;
@@ -347,10 +347,10 @@ function buildConfirmationPage(event) {
           CardService.newTextParagraph().setText(
             localizedMessage.replaceConfirmationMessage(
               targetFilesSummary,
-              ignoredFilesSummary
-            )
-          )
-        )
+              ignoredFilesSummary,
+            ),
+          ),
+        ),
       );
       // Fixed Footer
       const functionName = isHostDrive ? 'buildDriveHomepage' : 'buildHomepage';
@@ -361,16 +361,16 @@ function buildConfirmationPage(event) {
               .setText(localizedMessage.messageList.buttonCancel)
               .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
               .setOnClickAction(
-                CardService.newAction().setFunctionName(functionName)
-              )
+                CardService.newAction().setFunctionName(functionName),
+              ),
           )
           .setSecondaryButton(
             CardService.newTextButton()
               .setText(localizedMessage.messageList.buttonExecuteUnshare)
               .setOnClickAction(
-                CardService.newAction().setFunctionName('unshare')
-              )
-          )
+                CardService.newAction().setFunctionName('unshare'),
+              ),
+          ),
       );
       return builder.build();
     } else {
@@ -378,14 +378,14 @@ function buildConfirmationPage(event) {
         .map((isNotOwnerFile) => ` * ${isNotOwnerFile.fileName}`)
         .join('\n');
       throw new Error(
-        localizedMessage.replaceErrorYouMustBeOwner(isNotOwnerFileNameList)
+        localizedMessage.replaceErrorYouMustBeOwner(isNotOwnerFileNameList),
       );
     }
   } catch (error) {
     return createMessageCard(
       filteredErrorMessage(error),
       event.commonEventObject.userLocale,
-      event.commonEventObject.hostApp === 'DRIVE'
+      event.commonEventObject.hostApp === 'DRIVE',
     );
   }
 }
@@ -394,7 +394,7 @@ function unshare(event) {
   // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
-    event.commonEventObject.userLocale
+    event.commonEventObject.userLocale,
   );
   const start = new Date();
   try {
@@ -419,13 +419,13 @@ function unshare(event) {
     return createMessageCard(
       localizedMessage.messageList.noticeComplete,
       event.commonEventObject.userLocale,
-      event.commonEventObject.hostApp === 'DRIVE'
+      event.commonEventObject.hostApp === 'DRIVE',
     );
   } catch (error) {
     return createMessageCard(
       filteredErrorMessage(error),
       event.commonEventObject.userLocale,
-      event.commonEventObject.hostApp === 'DRIVE'
+      event.commonEventObject.hostApp === 'DRIVE',
     );
   }
 }
@@ -443,8 +443,8 @@ function createMessageCard(message, userLocale, isHostDrive = false) {
   const functionName = isHostDrive ? 'buildDriveHomepage' : 'buildHomepage';
   let builder = CardService.newCardBuilder().addSection(
     CardService.newCardSection().addWidget(
-      CardService.newTextParagraph().setText(message)
-    )
+      CardService.newTextParagraph().setText(message),
+    ),
   );
   // Fixed Footer
   builder.setFixedFooter(
@@ -452,8 +452,10 @@ function createMessageCard(message, userLocale, isHostDrive = false) {
       CardService.newTextButton()
         .setText(localizedMessage.messageList.buttonReturnHome)
         .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-        .setOnClickAction(CardService.newAction().setFunctionName(functionName))
-    )
+        .setOnClickAction(
+          CardService.newAction().setFunctionName(functionName),
+        ),
+    ),
   );
   return builder.build();
 }
@@ -470,7 +472,7 @@ function getFileUsers(event, useCache = false) {
   const cache = CacheService.getUserCache();
   // Localized Message
   const localizedMessage = new LocalizedMessage(
-    event.commonEventObject.userLocale
+    event.commonEventObject.userLocale,
   );
   // Get the array of target file/folder IDs from the event object
   let fileIds = [];
@@ -489,7 +491,7 @@ function getFileUsers(event, useCache = false) {
       break;
     default:
       throw new Error(
-        localizedMessage.messageList.errorUnavailbleOnThisPlatform
+        localizedMessage.messageList.errorUnavailbleOnThisPlatform,
       );
   }
   // Get the list of users who have access to the target files/folders
@@ -537,7 +539,7 @@ function getFileUsers(event, useCache = false) {
       }
       return obj;
     },
-    { isOwner: [], isNotOwner: [] }
+    { isOwner: [], isNotOwner: [] },
   );
   // console.log(JSON.stringify(fileUsers)); // debug
   return fileUsers;
@@ -556,7 +558,7 @@ function checkExecTime(
   currentIndex,
   originalFileArray,
   userLocale,
-  isFileEnd = false
+  isFileEnd = false,
 ) {
   if (
     new Date().getTime() - startTime.getTime() >=
@@ -570,8 +572,8 @@ function checkExecTime(
         originalFileArray
           .slice(slicePos)
           .map((file) => file.fileName)
-          .join('\n')
-      )
+          .join('\n'),
+      ),
     );
   } else {
     return null;
