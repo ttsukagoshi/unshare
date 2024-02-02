@@ -16,38 +16,6 @@
    See the GitHub repository for more details: https://github.com/ttsukagoshi/unshare
 */
 
-if (!CacheService) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockCacheService } = require('./__mocks__/mockCacheService');
-  var CacheService = MockCacheService;
-}
-if (!CardService) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockCardService } = require('./__mocks__/mockCardService');
-  var CardService = MockCardService;
-}
-if (!DriveApp) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockDriveApp } = require('./__mocks__/mockDriveApp');
-  var DriveApp = MockDriveApp;
-}
-if (!Session) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockSession } = require('./__mocks__/mockSession');
-  var Session = MockSession;
-}
-if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
-  const {
-    MockSpreadsheetApp,
-    MockDocumentApp,
-    MockSlidesApp,
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-  } = require('./__mocks__/mockEditorApp');
-  var SpreadsheetApp = MockSpreadsheetApp,
-    DocumentApp = MockDocumentApp,
-    SlidesApp = MockSlidesApp;
-}
-
 const CACHE_EXPIRATION_IN_SEC = 3600; // TTL of user cache in seconds
 const ADDON_EXEC_TIME_LIMIT_IN_MILLISEC = 30 * 1000; // Execution time limit of Google Workspace Add-ons in milliseconds, as specified in https://developers.google.com/apps-script/add-ons/concepts/actions#callback_functions
 const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
@@ -137,11 +105,6 @@ class LocalizedMessage {
       this.locale = this.DEFAULT_LOCALE;
     }
     this.messageList = MESSAGES[this.locale];
-    Object.keys(MESSAGES[this.DEFAULT_LOCALE]).forEach((key) => {
-      if (!this.messageList[key]) {
-        this.messageList[key] = MESSAGES[this.DEFAULT_LOCALE][key];
-      }
-    });
   }
 
   /**
