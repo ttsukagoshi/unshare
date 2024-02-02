@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { unshare } = require('../src/unshare');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { EVENT_DRIVE_SELECTED } = require('../src/__mocks__/mockEvents');
 
 const patterns = [

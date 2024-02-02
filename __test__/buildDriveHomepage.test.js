@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { buildDriveHomepage } = require('../src/unshare');
 const input = {
   testName: 'Check buildDriveHomepage in en',

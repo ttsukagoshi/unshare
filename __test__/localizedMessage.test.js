@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { MESSAGES, LocalizedMessage } = require('../src/unshare');
 
 // Check the number of keys, i.e. the number of messages
@@ -9,7 +10,7 @@ Object.keys(MESSAGES).forEach((locale) => {
   if (locale !== 'en') {
     test(`Check number of messages in ${locale} to match that of en`, () => {
       expect(Object.keys(MESSAGES[locale]).length).toBe(
-        Object.keys(MESSAGES['en']).length
+        Object.keys(MESSAGES['en']).length,
       );
     });
   }

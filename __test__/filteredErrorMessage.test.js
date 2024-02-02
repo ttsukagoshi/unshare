@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { filteredErrorMessage } = require('../src/unshare');
 const patterns = [
   {

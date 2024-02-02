@@ -1,8 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { buildConfirmationPage } = require('../src/unshare');
 const {
   EVENT_DRIVE_SELECTED,
   EVENT_SHEETS,
   EVENT_DRIVE_SELECTED_NOT_OWNER_FILE,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('../src/__mocks__/mockEvents');
 
 const patterns = [
@@ -101,7 +103,7 @@ const patterns = [
 patterns.forEach((pattern) => {
   test(pattern.testName, () => {
     expect(buildConfirmationPage(pattern.input)).toEqual(
-      pattern.expectedOutput
+      pattern.expectedOutput,
     );
   });
 });

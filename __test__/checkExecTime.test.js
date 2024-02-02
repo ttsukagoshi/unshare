@@ -1,6 +1,7 @@
 const {
   ADDON_EXEC_TIME_LIMIT_IN_MILLISEC,
   checkExecTime,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require('../src/unshare');
 const now = new Date();
 const userLocale = 'en';
@@ -60,8 +61,8 @@ patterns.forEach((pattern) => {
           currentIndex,
           originalFileArray,
           userLocale,
-          pattern.input.isFileEnd
-        )
+          pattern.input.isFileEnd,
+        ),
       ).toBe(pattern.expectedOutput);
     } else {
       expect(() => {
@@ -70,7 +71,7 @@ patterns.forEach((pattern) => {
           currentIndex,
           originalFileArray,
           userLocale,
-          pattern.input.isFileEnd
+          pattern.input.isFileEnd,
         );
       }).toThrowError(new Error(pattern.expectedOutput));
     }
