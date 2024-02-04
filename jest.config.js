@@ -18,11 +18,8 @@ module.exports = {
     },
   },
   globals: {
-    PropertiesService: {},
-    Session: {},
-    SpreadsheetApp: {},
-    UrlFetchApp: {},
-    Utilities: {},
+    CacheService: {},
+    CardService: {},
   },
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
