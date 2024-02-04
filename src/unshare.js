@@ -194,7 +194,6 @@ class LocalizedMessage {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildHomepage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -240,7 +239,6 @@ function buildHomepage(event) {
  * @see https://developers.google.com/apps-script/add-ons/drive/building-drive-interfaces#drive_homepages
  */
 function buildDriveHomepage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -264,7 +262,6 @@ function buildDriveHomepage(event) {
  * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  */
 function buildDriveItemsSelected(event) {
-  // console.log(JSON.stringify(event)); // debug
   return buildHomepage(event);
 }
 
@@ -277,7 +274,6 @@ function buildDriveItemsSelected(event) {
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildConfirmationPage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -359,7 +355,6 @@ function buildConfirmationPage(event) {
 }
 
 function unshare(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -509,7 +504,6 @@ function getFileUsers(event, useCache = false) {
     },
     { isOwner: [], isNotOwner: [] },
   );
-  // console.log(JSON.stringify(fileUsers)); // debug
   return fileUsers;
 }
 
