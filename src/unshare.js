@@ -16,38 +16,6 @@
    See the GitHub repository for more details: https://github.com/ttsukagoshi/unshare
 */
 
-if (!CacheService) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockCacheService } = require('./__mocks__/mockCacheService');
-  var CacheService = MockCacheService;
-}
-if (!CardService) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockCardService } = require('./__mocks__/mockCardService');
-  var CardService = MockCardService;
-}
-if (!DriveApp) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockDriveApp } = require('./__mocks__/mockDriveApp');
-  var DriveApp = MockDriveApp;
-}
-if (!Session) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { MockSession } = require('./__mocks__/mockSession');
-  var Session = MockSession;
-}
-if (!SpreadsheetApp && !DocumentApp && !SlidesApp) {
-  const {
-    MockSpreadsheetApp,
-    MockDocumentApp,
-    MockSlidesApp,
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-  } = require('./__mocks__/mockEditorApp');
-  var SpreadsheetApp = MockSpreadsheetApp,
-    DocumentApp = MockDocumentApp,
-    SlidesApp = MockSlidesApp;
-}
-
 const CACHE_EXPIRATION_IN_SEC = 3600; // TTL of user cache in seconds
 const ADDON_EXEC_TIME_LIMIT_IN_MILLISEC = 30 * 1000; // Execution time limit of Google Workspace Add-ons in milliseconds, as specified in https://developers.google.com/apps-script/add-ons/concepts/actions#callback_functions
 const ADDON_EXEC_TIME_LIMIT_WITH_BUFFER =
@@ -115,7 +83,7 @@ const MESSAGES = {
 
 class LocalizedMessage {
   /**
-   * @param {String} userLocale
+   * @param {string} userLocale
    */
   constructor(userLocale) {
     this.DEFAULT_LOCALE = 'en';
@@ -137,18 +105,13 @@ class LocalizedMessage {
       this.locale = this.DEFAULT_LOCALE;
     }
     this.messageList = MESSAGES[this.locale];
-    Object.keys(MESSAGES[this.DEFAULT_LOCALE]).forEach((key) => {
-      if (!this.messageList[key]) {
-        this.messageList[key] = MESSAGES[this.DEFAULT_LOCALE][key];
-      }
-    });
   }
 
   /**
    * Replace placeholder values in the designated text. String.prototype.replace() is executed using regular expressions with the 'global' flag on.
-   * @param {String} text
-   * @param {Array} placeholderValues Array of objects containing a placeholder string expressed in regular expression and its corresponding value.
-   * @returns {String} The replaced text.
+   * @param {string} text
+   * @param {any[]} placeholderValues Array of objects containing a placeholder string expressed in regular expression and its corresponding value.
+   * @returns {string} The replaced text.
    */
   replacePlaceholders_(text, placeholderValues = []) {
     let replacedText = placeholderValues.reduce(
@@ -160,9 +123,9 @@ class LocalizedMessage {
 
   /**
    * Replace placeholder string in this.messageList.confirmationMessage
-   * @param {String} targetFilesSummary
-   * @param {String} ignoredFilesSummary
-   * @returns {String} The replaced text.
+   * @param {string} targetFilesSummary
+   * @param {string} ignoredFilesSummary
+   * @returns {string} The replaced text.
    */
   replaceConfirmationMessage(targetFilesSummary, ignoredFilesSummary) {
     let text = this.messageList.confirmationMessage;
@@ -182,8 +145,8 @@ class LocalizedMessage {
 
   /**
    * Replace placeholder string in this.messageList.errorYouMustBeOwner
-   * @param {String} isNotOwnerFileNameList
-   * @returns {String} The replaced text.
+   * @param {string} isNotOwnerFileNameList
+   * @returns {string} The replaced text.
    */
   replaceErrorYouMustBeOwner(isNotOwnerFileNameList) {
     let text = this.messageList.errorYouMustBeOwner;
@@ -199,9 +162,9 @@ class LocalizedMessage {
 
   /**
    * Replace placeholder string in this.messageList.errorExceededTimeLimit
-   * @param {Number} addonExecTimeLimitInSec
-   * @param {String} unfinishedFilesList
-   * @returns {String} The replaced text.
+   * @param {number} addonExecTimeLimitInSec
+   * @param {string} unfinishedFilesList
+   * @returns {string} The replaced text.
    */
   replaceErrorExceededTimeLimit(addonExecTimeLimitInSec, unfinishedFilesList) {
     let text = this.messageList.errorExceededTimeLimit;
@@ -226,12 +189,11 @@ class LocalizedMessage {
 
 /**
  * Create the common homepage card for the add-on.
- * @param {Object} event Google Workspace Add-on Event object.
- * @returns {Object} Google Workspace Add-on Card object.
+ * @param {GoogleAppsScript.Addons.EventObject} event Google Workspace Add-on Event object.
+ * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildHomepage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -273,11 +235,10 @@ function buildHomepage(event) {
  * Create the Drive-specific homepage card for the add-on.
  * The user will see this card when triggering this add-on
  * without selecting any files on the Google Drive UI.
- * @returns {Object} Google Workspace Add-on Card object.
+ * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  * @see https://developers.google.com/apps-script/add-ons/drive/building-drive-interfaces#drive_homepages
  */
 function buildDriveHomepage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -297,11 +258,10 @@ function buildDriveHomepage(event) {
 
 /**
  * Create card for Google Drive when file(s) are selected.
- * @param {Object} event Google Workspace Add-on Event object.
- * @returns {Object} Google Workspace Add-on Card object.
+ * @param {GoogleAppsScript.Addons.EventObject} event Google Workspace Add-on Event object.
+ * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  */
 function buildDriveItemsSelected(event) {
-  // console.log(JSON.stringify(event)); // debug
   return buildHomepage(event);
 }
 
@@ -309,12 +269,11 @@ function buildDriveItemsSelected(event) {
  * Create the confirmation card for the add-on.
  * Checks if the target file's owner is the user executing the add-on; if not,
  * returns a message card that the add-on must be executed by the owner.
- * @param {Object} event Google Workspace Add-on Event object.
- * @returns {Object} Google Workspace Add-on Card object.
+ * @param {GoogleAppsScript.Addons.EventObject} event Google Workspace Add-on Event object.
+ * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  * @see https://developers.google.com/workspace/add-ons/concepts/event-objects
  */
 function buildConfirmationPage(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -396,7 +355,6 @@ function buildConfirmationPage(event) {
 }
 
 function unshare(event) {
-  // console.log(JSON.stringify(event)); // debug
   // Localized Message
   const localizedMessage = new LocalizedMessage(
     event.commonEventObject.userLocale,
@@ -437,11 +395,11 @@ function unshare(event) {
 
 /**
  * The general card object generator for errors and other messages to the add-on user.
- * @param {String} message The message to tell the user
- * @param {String} userLocale The user's locale specified in the event object.
+ * @param {string} message The message to tell the user
+ * @param {string} userLocale The user's locale specified in the event object.
  * https://developers.google.com/apps-script/add-ons/concepts/event-objects#common_event_object
- * @param {Boolean} isHostDrive Set to true when executed on Google Drive. Defaults to false.
- * @returns {Object} Google Workspace Add-on Card object.
+ * @param {boolean} isHostDrive Set to true when executed on Google Drive. Defaults to false.
+ * @returns {GoogleAppsScript.Card_Service.Card} Google Workspace Add-on Card object.
  */
 function createMessageCard(message, userLocale, isHostDrive = false) {
   const localizedMessage = new LocalizedMessage(userLocale);
@@ -469,9 +427,9 @@ function createMessageCard(message, userLocale, isHostDrive = false) {
  * Get the list of the file/folders' respective owner, editors, and viewers (including commenters)
  * based on the incoming Google Workspace Add-on event.
  * Refers to info saved in user cache whenever available.
- * @param {Object} event Google Workspace Add-on Event object.
- * @param {Boolean} useCache Will not refer to user cache when false, the default value.
- * @returns {Object} Summarized JavaScript objects of the input files with their respective owner, editors, and viewers.
+ * @param {GoogleAppsScript.Addons.EventObject} event Google Workspace Add-on Event object.
+ * @param {boolean} useCache Will not refer to user cache when false, the default value.
+ * @returns {*} Summarized JavaScript objects of the input files with their respective owner, editors, and viewers.
  */
 function getFileUsers(event, useCache = false) {
   const cache = CacheService.getUserCache();
@@ -546,17 +504,16 @@ function getFileUsers(event, useCache = false) {
     },
     { isOwner: [], isNotOwner: [] },
   );
-  // console.log(JSON.stringify(fileUsers)); // debug
   return fileUsers;
 }
 
 /**
  * Checks the current add-on execution time and returns a time-out error when applicable
  * @param {Date} startTime Date object indicating the start time of the add-on execution
- * @param {Number} currentIndex Current index
- * @param {Array} originalFileArray The original array of target files
- * @param {String} userLocale User locale defined in the Google Workspace Add-on event object
- * @param {Boolean} isFileEnd Indicator to show if this check function is executed at the end of a single file process. Defaults to false.
+ * @param {number} currentIndex Current index
+ * @param {any[]} originalFileArray The original array of target files
+ * @param {string} userLocale User locale defined in the Google Workspace Add-on event object
+ * @param {boolean} isFileEnd Indicator to show if this check function is executed at the end of a single file process. Defaults to false.
  */
 function checkExecTime(
   startTime,
@@ -588,8 +545,8 @@ function checkExecTime(
 /**
  * Determines if the error is predefined and returns a simple error message in such cases.
  * If the error is not defined, this function will return a full error message in `error.stack`.
- * @param {Object} error Exceptions thrown in the script
- * @returns {String}
+ * @param {Error} error Exceptions thrown in the script
+ * @returns {string}
  */
 function filteredErrorMessage(error) {
   return error.message.startsWith('[ERROR] ') ||
